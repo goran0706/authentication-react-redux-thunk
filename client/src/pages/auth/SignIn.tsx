@@ -21,7 +21,7 @@ const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const { signIn } = useActions()
+  const { signIn, clearError } = useActions()
   const { token, error, isError, isLoading } = useTypedSelector(
     (state) => state.auth
   )
@@ -41,6 +41,7 @@ const SignIn = () => {
   const handleReset = () => {
     setEmail('')
     setPassword('')
+    clearError()
   }
 
   const handleSubmit = (event: FormEvent) => {
@@ -76,7 +77,7 @@ const SignIn = () => {
                 />
               </FormControl>
               {isError && (
-                <Alert status="error">
+                <Alert status="error" borderRadius="md">
                   <AlertIcon />
                   {error}
                 </Alert>

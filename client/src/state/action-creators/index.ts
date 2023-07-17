@@ -6,6 +6,15 @@ import userService from '../../services/user-service'
 import { ActionType } from '../action-types'
 import { Action } from '../actions'
 
+function setAxiosConfig() {
+  const token = localStorage.getItem('token') as string
+  return {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  }
+}
+
 // TODO: too many despatches here
 
 export const signUp = (email: string, password: string) => {
@@ -65,9 +74,13 @@ export const signOut = () => {
   return { type: ActionType.AUTH_USER, payload: '' }
 }
 
+export const clearError = () => {
+  return { type: ActionType.ERROR_CLEAR }
+}
+
 export const getUsers = () => (dispatch: Dispatch<Action>) => {
   dispatch({ type: ActionType.IS_LOADING, payload: true })
-  const { request, cancel } = userService.getAll<IUser>()
+  const { request, cancel } = userService.getAll<IUser>(setAxiosConfig())
   request
     .then((res) => {
       dispatch({ type: ActionType.GET_USERS, payload: res.data })
@@ -90,7 +103,7 @@ export const getUsers = () => (dispatch: Dispatch<Action>) => {
 
 export const createUser = (user: IUser) => (dispatch: Dispatch<Action>) => {
   userService
-    .create(user)
+    .create(user, setAxiosConfig())
     .then((res) => {
       dispatch({ type: ActionType.CREATE_USER, payload: res.data })
       dispatch({ type: ActionType.IS_ERROR, payload: false })
@@ -110,7 +123,7 @@ export const createUser = (user: IUser) => (dispatch: Dispatch<Action>) => {
 
 export const updateUser = (user: IUser) => (dispatch: Dispatch<Action>) => {
   userService
-    .update(user)
+    .update(user, setAxiosConfig())
     .then((res) => {
       dispatch({ type: ActionType.UPDATE_USER, payload: res.data })
       dispatch({ type: ActionType.IS_ERROR, payload: false })
@@ -130,7 +143,7 @@ export const updateUser = (user: IUser) => (dispatch: Dispatch<Action>) => {
 
 export const deleteUser = (user: IUser) => (dispatch: Dispatch<Action>) => {
   userService
-    .delete(user)
+    .delete(user, setAxiosConfig())
     .then((res) => {
       dispatch({ type: ActionType.DELETE_USER, payload: res.data })
       dispatch({ type: ActionType.IS_ERROR, payload: false })

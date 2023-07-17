@@ -21,7 +21,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
-  const { signUp } = useActions()
+  const { signUp, clearError } = useActions()
   const { token, error, isError, isLoading } = useTypedSelector(
     (state) => state.auth
   )
@@ -43,6 +43,7 @@ const SignUp = () => {
     setEmail('')
     setPassword('')
     setConfirmPassword('')
+    clearError()
   }
 
   const handleSubmit = (event: FormEvent) => {
@@ -87,13 +88,13 @@ const SignUp = () => {
                 />
               </FormControl>
               {password !== confirmPassword && (
-                <Alert status="error">
+                <Alert status="error" borderRadius="md">
                   <AlertIcon />
                   Password must match
                 </Alert>
               )}
               {isError && (
-                <Alert status="error">
+                <Alert status="error" borderRadius="md">
                   <AlertIcon />
                   {error}
                 </Alert>

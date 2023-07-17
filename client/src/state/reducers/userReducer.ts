@@ -35,14 +35,14 @@ const userReducer = (
       const users = state.users.filter((u) => u._id !== user._id)
       return { ...state, users }
     }
-    case ActionType.ERROR:
-      return { ...state, error: action.payload }
-    case ActionType.ERROR_CLEAR:
-      return { ...state, error: action.payload }
     case ActionType.IS_ERROR:
       return { ...state, isError: action.payload }
     case ActionType.IS_LOADING:
       return { ...state, isLoading: action.payload }
+    case ActionType.ERROR:
+      return { ...state, error: action.payload }
+    case ActionType.ERROR_CLEAR:
+      return { ...state, error: '', isError: false }
     default:
       return state
   }

@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from 'axios'
 import apiClient from '../api/api-client'
 
 interface Entity {
@@ -7,32 +8,32 @@ interface Entity {
 class HttpService {
   constructor(public endpoint: string) {}
 
-  getAll<T>() {
+  getAll<T>(config: AxiosRequestConfig) {
     const controller = new AbortController()
     const signal = controller.signal
     const cancel = () => controller.abort()
-    const request = apiClient.get<T[]>(this.endpoint, { signal })
+    const request = apiClient.get<T[]>(this.endpoint, { ...config, signal })
     return { request, cancel }
   }
 
-  get<T>() {
+  get<T>(config: AxiosRequestConfig) {
     const controller = new AbortController()
     const signal = controller.signal
     const cancel = () => controller.abort()
-    const request = apiClient.get<T>(this.endpoint, { signal })
+    const request = apiClient.get<T>(this.endpoint, { ...config, signal })
     return { request, cancel }
   }
 
-  create<T extends Entity>(entity: T) {
-    return apiClient.post<T>(this.endpoint, entity)
+  create<T extends Entity>(entity: T, config: AxiosRequestConfig) {
+    return apiClient.post<T>(this.endpoint, entity, config)
   }
 
-  update<T extends Entity>(entity: T) {
-    return apiClient.put<T>(`${this.endpoint}/${entity._id}`, entity)
+  update<T extends Entity>(entity: T, config: AxiosRequestConfig) {
+    return apiClient.put<T>(`${this.endpoint}/${entity._id}`, entity, config)
   }
 
-  delete<T extends Entity>(entity: T) {
-    return apiClient.delete<T>(`${this.endpoint}/${entity._id}`)
+  delete<T extends Entity>(entity: T, config: AxiosRequestConfig) {
+    return apiClient.delete<T>(`${this.endpoint}/${entity._id}`, config)
   }
 }
 
